@@ -1,9 +1,13 @@
+using System;
+using System.CodeDom;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Xml.Serialization;
 using System.Text.Json;
 using System.Runtime.Serialization.Json;
 using MyBut;
+using System.ComponentModel.DataAnnotations;
+
 namespace Lab_2
 {
     public partial class Form1 : Form
@@ -13,6 +17,10 @@ namespace Lab_2
             InitializeComponent();
 
             openFileDialog1.Multiselect = true;
+            UpdateState();
+
+
+
         }
 
         
@@ -24,7 +32,6 @@ namespace Lab_2
         //only digit
         private void Digit(object sender, KeyPressEventArgs e)
         {
-
             e.Handled = !(Char.IsDigit(e.KeyChar) ||  (e.KeyChar == (char)8));
         }
         //only symbols
@@ -48,7 +55,7 @@ namespace Lab_2
         {
            
                 if (Book_Format.Text != "" || Book_Title.Text != "" || Book_FileSize.Text != "" ||
-                    Book_PageNumbs.Text != "")
+                    Book_PageNumbs.Text != "" || Book_UDK.Text != "")
                 {
                     FinalBookFile.Text += "Book info:\n\n";
                 }
@@ -84,6 +91,10 @@ namespace Lab_2
                     FinalBookFile.Text += $"Upload Date: {Book_UploadDate.Text}\n";
                 }
 
+                if (Book_UDK.Text != "")
+                {
+                    FinalBookFile.Text += $"UDK: {Book_UDK.Text}\n";
+                }
 
                 FinalBookFile.Text += "\n";
         }
@@ -121,6 +132,10 @@ namespace Lab_2
             {
                 string type = Publisher_PrivateRadio.Checked ? "Private" : "State";
                 FinalBookFile.Text += $"Type: {type}\n";
+            }
+            if (Book_UDK.Text != "")
+            {
+                FinalBookFile.Text += $"UDK: {Book_UDK.Text}\n";
             }
             FinalBookFile.Text += $"\n";
         }
@@ -164,6 +179,7 @@ namespace Lab_2
 
 
                 UpdateFinalBookInfo();
+                ChangeLastActivity("Add Author");
             }
             catch(Exception ex)
             {
@@ -221,6 +237,10 @@ namespace Lab_2
                 {
                     return;
                 }
+                //Change Activity
+                ChangeLastActivity("Save book");
+
+
                 string filePath = saveFileDialog1.FileName;
                 //Проверка параметров на пустые строки
                 if (Publisher_Name.Text != "" || Publisher_Country.Text != "" || Publisher_City.Text != ""
@@ -237,11 +257,34 @@ namespace Lab_2
 
                 BookFile book = new BookFile(
                     Book_Format.Text, Book_Title.Text, int.Parse(Book_FileSize.Text), Book_FileSize_Type.Text,
-                    int.Parse(Book_PageNumbs.Text), Book_UploadDate.Text,
+                    Book_PageNumbs.Text, Book_UploadDate.Text,
                     new Publisher(Publisher_Name.Text, Publisher_Country.Text, Publisher_City.Text,
-                        int.Parse(Publisher_FoundationYear.Text), Publisher_StateRadio.Checked ? 0 : 1));
+                        int.Parse(Publisher_FoundationYear.Text), Publisher_StateRadio.Checked ? 0 : 1),Book_UDK.Text);
 
-               
+                var results1 = new List<ValidationResult>();
+                var context1 = new ValidationContext(book.publisher);
+                if (!Validator.TryValidateObject(book.publisher, context1, results1, true))
+                {
+                    string errorStr = "";
+                    foreach (var elem in results1)
+                    {
+                        errorStr += elem.ErrorMessage;
+                    }
+                    throw new Exception(errorStr);
+                }
+
+                var results2 = new List<ValidationResult>();
+                var context2 = new ValidationContext(book);
+                if (!Validator.TryValidateObject(book, context2, results2, true))
+                {
+                    string errorStr = "";
+                    foreach (var elem in results2)
+                    {
+                        errorStr += elem.ErrorMessage;
+                    }
+                    throw new Exception(errorStr);
+                }
+
 
                 DataContractJsonSerializer Jmatter = new DataContractJsonSerializer(typeof(BookFile));
                 using (FileStream fj = new FileStream(filePath, FileMode.OpenOrCreate))
@@ -257,12 +300,15 @@ namespace Lab_2
 
         private void LoadFile()
         {
+
+
             openFileDialog1.Multiselect = true;
             openFileDialog1.Filter = "Json file(*.json)|*.json";
             if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
             {
                 return;
             }
+
             var arrFiles = openFileDialog1.FileNames;
             string filePath;
             if (arrFiles.Length == 1)
@@ -280,27 +326,37 @@ namespace Lab_2
                 loaded.BackColor = Color.Transparent;
                 loaded.ForeColor = Color.Black;
                 this.Controls.Add(loaded);
-                //RichTextBox for books
-                RichTextBox books = new RichTextBox();
+                //ListView for books
+                ListView books = new ListView();
+                //RichTextBox books = new RichTextBox();
                 books.Location = new Point(loaded.Location.X, loaded.Location.Y + loaded.Size.Height);
                 books.Size = new Size(loaded.Size.Width, loaded.Size.Height*3);
-                books.WordWrap = false;
+                //books.WordWrap = false;
                 books.Name = "Loaded_Books_All";
+                books.DoubleClick += new System.EventHandler(ChooseBook);
                 this.Controls.Add(books);
 
+                
                 foreach (var elem in arrFiles)
                 {
                     BookFile book = DeserializeBookFile(elem);
                     //take only name of file(without .json)
-                    string str = elem.Substring(elem.LastIndexOf('\\')+1);
-                    str = str.Remove(str.LastIndexOf('.'));
+                    //string str = elem.Substring(elem.LastIndexOf('\\')+1);
+                    //str = str.Remove(str.LastIndexOf('.'));
+                    //    str += $"({book.title})";
+
+                    books.Items.Add($"{book.title}");
                     
-                    books.Text += $"{str}({book.title})\n";
+
                     BookFile.books.Add(book);
+                
                 }
+
+                //change Activity
+                ChangeLastActivity("Loading book(s)");
                 return;
             }
-
+            
             LoadBookFileIn(filePath);
         }
 
@@ -326,17 +382,15 @@ namespace Lab_2
             
             foreach (var elem in Controls.Find("Loaded_Books_All", true))
             {
-                elem.Text = null;
                 Controls.Remove(elem);
             }
         }
 
-        private void LoadBookFileIn(string filePath)
+        private void LoadBookFileIn(BookFile book)
         {
             ClearAll();
-            DeleteLoadedBooks();
-            BookFile book = DeserializeBookFile(filePath);
             
+
             //adding info to form
             Book_Format.Text = book.format;
             Book_Title.Text = book.title;
@@ -344,6 +398,7 @@ namespace Lab_2
             Book_FileSize_Type.Text = book.fileSizeType;
             Book_PageNumbs.Text = book.pageNumbers.ToString();
             Book_UploadDate.Text = book.uploadDate.ToString();
+            Book_UDK.Text = book.udk;
 
             Publisher_Name.Text = book.publisher._name;
             Publisher_Country.Text = book.publisher._country;
@@ -366,13 +421,54 @@ namespace Lab_2
             UpdateFinalBookInfo();
         }
 
+        private void LoadBookFileIn(string filePath)
+        {
+            ClearAll();
+            DeleteLoadedBooks();
+            BookFile book = DeserializeBookFile(filePath);
+            BookFile.books.Add(book);
+            //adding info to form
+            Book_Format.Text = book.format;
+            Book_Title.Text = book.title;
+            Book_FileSize.Text = book.fileSize.ToString();
+            Book_FileSize_Type.Text = book.fileSizeType;
+            Book_PageNumbs.Text = book.pageNumbers.ToString();
+            Book_UploadDate.Text = book.uploadDate.ToString();
+            Book_UDK.Text = book.udk;
+
+            Publisher_Name.Text = book.publisher._name;
+            Publisher_Country.Text = book.publisher._country;
+            Publisher_City.Text = book.publisher._city;
+            Publisher_FoundationYear.Text = book.publisher.FoundationYear.ToString();
+            if (book.publisher.PubType == 0)
+            {
+                Publisher_StateRadio.Checked = true;
+            }
+            else
+            {
+                Publisher_PrivateRadio.Checked = true;
+            }
+
+            foreach (var elem in book._authors)
+            {
+                BookFile.authors.Add(elem);
+            }
+
+            UpdateFinalBookInfo();
+            //change Activity
+            ChangeLastActivity("Loading book");
+        }
+
         private void ClearAll()
         {
+            FinalBookFile.Text = "";
+
             Book_Format.Text = "";
             Book_FileSize.Text = "";
             Book_FileSize_Type.Text = "";
             Book_Title.Text = "";
             Book_PageNumbs.Text = "";
+            Book_UDK.Text = "";
 
             Publisher_Name.Text = "";
             Publisher_Country.Text = "";
@@ -398,22 +494,227 @@ namespace Lab_2
         {
             BookFile.authors.Clear();
             UpdateFinalBookInfo();
+            ChangeLastActivity("Remove all Authors");
         }
         //delete last: authors
         private void myButton19_Click(object sender, EventArgs e)
         {
             BookFile.authors.Remove(BookFile.authors.Last());
             UpdateFinalBookInfo();
+            ChangeLastActivity("Remove last author");
         }
 
         private void CreateFindMenu(object sender, EventArgs e)
         {
-            Find_Menu newForm = new Find_Menu();
 
-            newForm.Show();
+            ChangeLastActivity("Open Find Menu");
+            Find_Menu newForm = new Find_Menu();
+            newForm.Show(this);
 
         }
 
+        private void ChooseBook(object sender, EventArgs e)
+        {
 
+            //find name of send 
+            ListView temp = new ListView();
+            temp = (ListView) sender;
+            BookFile.choosedBook = temp.FocusedItem.Index;
+            LoadBookFileIn(BookFile.books[temp.FocusedItem.Index]);
+        }
+
+        
+        public static void ApplyFind(bool[] indexes, Form form)
+        {
+            
+
+            var boxControl = form.Controls.Find("Loaded_Books_All", true);
+            var box = (ListView)boxControl[0];
+
+            for (var i = 0; i < indexes.Length; i++)
+            {
+                if (indexes[i] == false)
+                {
+                    box.Items[i].BackColor = Color.IndianRed;
+                    continue;
+                }
+                
+                box.Items[i].BackColor = Color.Green;
+
+            }
+
+        }
+
+        private void UpdateBooks()
+        {
+            var books = Controls.Find("Loaded_Books_All", true);
+            ListView box = (ListView)books[0];
+            box.Clear();
+
+            foreach (var elem in BookFile.books)
+            {
+                box.Items.Add($"{elem.title}");
+            }
+
+        }
+
+        private void SortingByName(object sender, EventArgs e)
+        {
+            try
+            {
+                var list = from elem in BookFile.books
+                    orderby elem.title
+                    select elem;
+
+                List<BookFile> booksList = new List<BookFile>();
+                foreach (var elem in list)
+                {
+                    booksList.Add(elem);
+                }
+
+                BookFile.books.Clear();
+                foreach (var elem in booksList)
+                {
+
+                    BookFile.books.Add(elem);
+                }
+
+                UpdateBooks();
+                ChangeLastActivity("Sorting Books By Name");
+            }
+            catch
+            {
+            }
+        }
+
+        private void SortingByYear(object sender, EventArgs e)
+        {
+            try
+            {
+                var list = from elem in BookFile.books
+                    orderby int.Parse(elem.uploadDate[^7..^3])
+                    select elem;
+
+
+                List<BookFile> booksList = new List<BookFile>();
+                foreach (var elem in list)
+                {
+                    booksList.Add(elem);
+                }
+
+                BookFile.books.Clear();
+                foreach (var elem in booksList)
+                {
+                    BookFile.books.Add(elem);
+                }
+
+                UpdateBooks();
+                ChangeLastActivity("Sorting Books By Year");
+            }
+            catch
+            {
+            }
+        }
+
+        private void OpenAbout(object sender, EventArgs e)
+        {
+            About newForm = new About();
+            newForm.Show(this);
+            ChangeLastActivity("Open Find Menu");
+        }
+
+        private void ChangeLastActivity(string activity)
+        {
+            StateLineSt.LastActivity = activity;
+            UpdateState();
+        }
+
+        private void CloseMenu(object sender, EventArgs e)
+        {
+            tool_menu.Visible = false;
+            but_open_menu.Visible = true;
+        }
+
+        private void OpenMenu(object sender, EventArgs e)
+        {
+            tool_menu.Visible = true;
+            but_open_menu.Visible = false;
+
+        }
+
+        private void UpdateState()
+        {
+            StateLine.Text = "";
+            StateLineSt.ObjectCount = BookFile.books.Count;
+            StateLine.Text += $"Objects counter: {StateLineSt.ObjectCount.ToString()}\n";
+            StateLine.Text += $"Last activity: {StateLineSt.LastActivity}\n";
+            StateLine.Text += $"Current date: {StateLineSt.CurrentDate}\n";
+        }
+
+        private void ClearAll(object sender, EventArgs e)
+        {
+            ChangeLastActivity("Clear all info");
+
+            ClearAll();
+            DeleteLoadedBooks();
+            UpdateState();
+        }
+
+        private void ListUpdate(object sender, EventArgs e)
+        {
+            ChangeLastActivity("Change info in list");
+        }
+
+        private void TextInfoUpdate(object sender, EventArgs e)
+        {
+            ChangeLastActivity("Change text");
+        }
+
+        private void ChangeDate(object sender, EventArgs e)
+        {
+            ChangeLastActivity("Change Date");
+        }
+
+        private void Next(object sender, EventArgs e)
+        {
+            try
+            {
+                BookFile.choosedBook++;
+                if (BookFile.choosedBook >= BookFile.books.Count || BookFile.choosedBook < 0)
+                {
+                    BookFile.choosedBook--;
+                    throw new Exception("Book Doesn't Exist");
+                }
+                
+                BookFile book = BookFile.books[BookFile.choosedBook];
+                LoadBookFileIn(book);
+                ChangeLastActivity("Read Next Book");
+            }
+            catch(Exception ex)
+            {
+                CauseException(ex);
+            }
+        }
+
+        private void Previous(object sender, EventArgs e)
+        {
+            try
+            {
+                BookFile.choosedBook--;
+                if (BookFile.choosedBook>=BookFile.books.Count || BookFile.choosedBook<0)
+                {
+                    BookFile.choosedBook++;
+                    throw new Exception("Book Doesn't Exist");
+                }
+                
+                BookFile book = BookFile.books[BookFile.choosedBook];
+                LoadBookFileIn(book);
+                ChangeLastActivity("Read Previous Book");
+            }
+            catch (Exception ex)
+            {
+                CauseException(ex);
+            }
+        }
     }
 }

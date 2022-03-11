@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Lab_2
 {
@@ -18,7 +19,8 @@ namespace Lab_2
         [DataMember]
         public string _city { get; init; }
 
-        [DataMember] private int _foundationYear;
+        [DataMember]
+        private int _foundationYear;
 
         [DataMember] private Type _type;
 
@@ -42,21 +44,11 @@ namespace Lab_2
 
         }
 
+        [Range(0, 2022, ErrorMessage = "Wrong Foundation Year")]
         public int FoundationYear
         {
-            get { return _foundationYear; }
-            set
-            {
-                if (value < DateTime.Now.Year && value > 0)
-                {
-                    _foundationYear = value;
-                }
-                else
-                {
-                    throw new Exception("Publisher:Wrong foundation year");
-                }
-
-            }
+            get => _foundationYear;
+            set => _foundationYear = value;
         }
 
         public Publisher(string name, string country, string city, int year, int type)

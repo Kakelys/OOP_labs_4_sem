@@ -1,0 +1,17 @@
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\bin\Debug\net6.0-windows\Lab_2.exe
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\bin\Debug\net6.0-windows\Lab_2.deps.json
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\bin\Debug\net6.0-windows\Lab_2.runtimeconfig.json
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\bin\Debug\net6.0-windows\Lab_2.dll
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\bin\Debug\net6.0-windows\ref\Lab_2.dll
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\bin\Debug\net6.0-windows\Lab_2.pdb
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\Lab_2.csproj.AssemblyReference.cache
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\Lab_2.Form1.resources
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\Lab_2.csproj.GenerateResource.cache
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\Lab_2.GeneratedMSBuildEditorConfig.editorconfig
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\Lab_2.AssemblyInfoInputs.cache
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\Lab_2.AssemblyInfo.cs
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\Lab_2.csproj.CoreCompileInputs.cache
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\Lab_2.dll
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\ref\Lab_2.dll
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\Lab_2.pdb
+C:\papka\programms\Git\OOP_labs_4_sem\Lab_2\Lab_2\obj\Debug\net6.0-windows\Lab_2.genruntimeconfig.cache

@@ -4,8 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-
-
+using System.ComponentModel.DataAnnotations;
 
 namespace Lab_2
 {
@@ -14,6 +13,8 @@ namespace Lab_2
     {
         //list of books for load several books
         public static List<BookFile> books = new List<BookFile>();
+
+        public static int choosedBook { get; set; } = -1;
 
         //for loading book
         [DataMember]
@@ -26,7 +27,13 @@ namespace Lab_2
         [DataMember] public string title { get; set; }
         [DataMember] public int fileSize { get; set; } 
         [DataMember] public string fileSizeType { get; set; }
-        [DataMember] public int pageNumbers { get; set; }
+
+        [DataMember]
+        [MyUDK]
+        public string udk { get; set; }
+
+        [DataMember]
+        public string pageNumbers { get; set; }
         [DataMember] public string uploadDate { get; set; }
 
 
@@ -35,8 +42,8 @@ namespace Lab_2
 
        
 
-        public BookFile(string format, string title, int fileSize,string fileSizeType, int pageNumbers, string uploadDate, 
-            Publisher publisher)
+        public BookFile(string format, string title, int fileSize,string fileSizeType, string pageNumbers, string uploadDate, 
+            Publisher publisher, string udk)
         {
             this.format = format;
             this.title = title;
@@ -47,7 +54,7 @@ namespace Lab_2
 
             this.publisher = new Publisher();
             this.publisher = (Publisher)publisher.Clone();
-
+            this.udk = udk;
             _authors = new List<Author>();
             foreach (var elem in authors)
             {

@@ -338,5 +338,10 @@ namespace Lab_2
             BookFile.authors.Remove(BookFile.authors.Last());
             UpdateFinalBookInfo();
         }
+
+        private void myButton21_Click(object sender, EventArgs e)
+        {
+            AbstractFactory.AFCreate();
+        }
     }
 }
