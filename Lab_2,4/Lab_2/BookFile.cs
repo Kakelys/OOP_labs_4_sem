@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Lab_2
 {
+
+
+
     [Serializable]
     [DataContract]
     internal class BookFile : Prototype<BookFile>
