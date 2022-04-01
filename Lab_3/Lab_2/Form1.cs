@@ -18,9 +18,6 @@ namespace Lab_2
 
             openFileDialog1.Multiselect = true;
             UpdateState();
-
-
-
         }
 
         
