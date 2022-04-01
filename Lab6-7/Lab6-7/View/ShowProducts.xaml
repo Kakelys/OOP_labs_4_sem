@@ -13,15 +13,17 @@
                     <Expander >
                         <Expander.HeaderTemplate>
                             <DataTemplate >
-                                <UniformGrid Columns ="4" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}, Path=DataContext }">
+                                <UniformGrid Columns ="5" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}, Path=DataContext }">
                                     <UniformGrid.Resources>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Margin" Value="5" />
                                             <Setter Property="TextAlignment" Value="Center" />
                                         </Style>
                                     </UniformGrid.Resources>
-                                   
-                                        <StackPanel>
+                                    <StackPanel>
+                                        <Image Source="{Binding ImagePath}" Width="75" Height="75"/>
+                                    </StackPanel>
+                                    <StackPanel>
                                             <TextBlock Text ="Name:"/>
                                     <TextBlock Text ="{Binding Name}"/>
                                         </StackPanel>

@@ -13,10 +13,12 @@ namespace Lab6_7.ViewModel
     internal class ShowProductView:ViewModelBase
     {
         public Product Product;
+        private Action _update;
 
-        public ShowProductView(Product product)
+        public ShowProductView(Product product,Action act)
         {
             Product = product;
+            _update = act;
         }
 
 
@@ -75,9 +77,14 @@ namespace Lab6_7.ViewModel
             get => new DelegateCommand(() =>
             {
                 Shop.Delete(Product);
-                
+                _update();
             });
         }
+
+        public ICommand Edit => new DelegateCommand(() =>
+        {
+            
+        });
     }
 }
 
