@@ -10,7 +10,7 @@ namespace Lab6_7.Model
 {
     [Serializable]
     [DataContract]
-    internal class Product
+    public class Product
     {
         [DataMember]
         public int Id { get; set; }

@@ -66,5 +66,12 @@ namespace Lab6_7.Model
             temp.Products.RemoveAt(product.Id-1);
             temp.SaveProducts();
         }
+
+        public static void SaveEdit(Product product, int id)
+        {
+            var shop = new Shop();
+            shop.Products[id - 1] = product;
+            shop.SaveProducts();
+        }
     }
 }

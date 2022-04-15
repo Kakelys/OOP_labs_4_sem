@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:Lab6_7.View"
         mc:Ignorable="d"
         
-        Title="AddingProduct" Height="450" Width="800">
+        Title="AddingProduct" Height="450" Width="800"
+        
+        >
     <Window.Resources>
         <Style TargetType="Button" x:Key="MyButton">
             <Setter Property="Height" Value="15"/>
@@ -23,6 +25,16 @@
                                 <Setter Property="Background" Value="red">
                                     </Setter>
                             </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                    <Condition Property="IsPressed" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <MultiTrigger.Setters>
+                                    <Setter Property="Background" Value="Aquamarine"/>
+                                </MultiTrigger.Setters>
+                            </MultiTrigger>
+                            
                         </ControlTemplate.Triggers>
                         </ControlTemplate>
                 </Setter.Value>
@@ -75,7 +87,7 @@
                             <Setter.Value>
                                 <ControlTemplate>
                                     <StackPanel>
-                                        <TextBlock Text ="Name"></TextBlock>
+                                        <TextBlock Text ="{DynamicResource ProductName}"></TextBlock>
                                     <TextBox TabIndex="1" Text ="{Binding Name}">
                                         </TextBox>
                                         </StackPanel>
@@ -94,7 +106,7 @@
                                 <Setter.Value>
                                     <ControlTemplate>
                                         <StackPanel>
-                                            <TextBlock Text ="Description"></TextBlock>
+                                        <TextBlock Text ="{DynamicResource ProductDescription}"></TextBlock>
                                         <TextBox TabIndex="2" Text ="{Binding Description}">
                                             </TextBox>
                                         </StackPanel>
@@ -112,7 +124,7 @@
                                 <Setter.Value>
                                     <ControlTemplate>
                                         <StackPanel>
-                                            <TextBlock  Text ="Amount"></TextBlock>
+                                        <TextBlock  Text ="{DynamicResource ProductAmount}"></TextBlock>
                                         <TextBox TabIndex="3" Text ="{Binding Amount}">
                                             </TextBox>
                                         </StackPanel>
@@ -130,7 +142,7 @@
                                 <Setter.Value>
                                     <ControlTemplate>
                                         <StackPanel>
-                                            <TextBlock Text ="Price"></TextBlock>
+                                        <TextBlock Text ="{DynamicResource ProductPrice}"></TextBlock>
                                         <TextBox TabIndex="4" Text ="{Binding Price}">
                                             </TextBox>
                                         </StackPanel>
@@ -140,8 +152,8 @@
                         </Style>
                     </TextBox.Style>
                 </TextBox>
-                
-                <Button  Command="{Binding ChooseImage}"  Style="{StaticResource ButtonChoose}" Width="100"  HorizontalAlignment="Left" Margin="20,0,0,0" Tag ="Choose Image"></Button>
+
+            <Button  Command="{Binding ChooseImage}"  Style="{StaticResource ButtonChoose}" Width="Auto"  HorizontalAlignment="Left" Margin="20,0,0,0" Tag ="{DynamicResource ChooseImageButton}"></Button>
                 <TextBlock Text ="{Binding ImagePath}" Width="Auto" Margin="20,5,20,0" Visibility="{Binding IsImageChoosed}"></TextBlock>
            
             
@@ -149,7 +161,7 @@
 
         </StackPanel>
         <StackPanel Grid.Column="1">
-            <Button Command="{Binding AddProduct}" Content ="Add"  Style="{StaticResource MyButton}">
+            <Button Command="{Binding AddProduct}" Content ="{DynamicResource AddButton}"  Style="{StaticResource MyButton}">
                 </Button>
             <Button Command ="{Binding ClearAll}" Style="{StaticResource MyButton}">
                 </Button>

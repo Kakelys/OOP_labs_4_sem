@@ -6,11 +6,24 @@
         xmlns:local="clr-namespace:Lab6_7.View"
         mc:Ignorable="d"
         Title="ShowProducts" Height="450" Width="800">
-    <Grid>
-        <ItemsControl ItemsSource="{Binding Products}">
+    <StackPanel>
+        <Border CornerRadius="10" BorderThickness="0" Background="Gray" Width ="auto" MinWidth="100" MaxWidth="200" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,5,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="15"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" BorderThickness="0" Background="Transparent" Command="{Binding FindCommand}">
+                    <Image  Source="pack://application:,,,/icons/search.png" Width="12" Height="12" Margin="0,0,1,2"/>
+                </Button>
+                <TextBox  Background="Transparent" Text="{Binding FindLine}"  BorderThickness="0" Margin="10,0,0,0" TextAlignment="Left" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+        <WrapPanel>
+            <ItemsControl ItemsSource="{Binding Products}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Expander >
+                    <Expander Width="100">
                         <Expander.HeaderTemplate>
                             <DataTemplate >
                                 <UniformGrid Columns ="5" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}, Path=DataContext }">
@@ -24,20 +37,20 @@
                                         <Image Source="{Binding ImagePath}" Width="75" Height="75"/>
                                     </StackPanel>
                                     <StackPanel>
-                                            <TextBlock Text ="Name:"/>
-                                    <TextBlock Text ="{Binding Name}"/>
-                                        </StackPanel>
+                                        <TextBlock Text ="{DynamicResource ProductName}"/>
+                                        <TextBlock Text ="{Binding Name}"/>
+                                    </StackPanel>
                                     <StackPanel>
-                                        <TextBlock Text ="Price:"/>
-                                    <TextBlock Text ="{Binding Price}"/>
-                                        </StackPanel>
+                                        <TextBlock Text ="{DynamicResource ProductPrice}"/>
+                                        <TextBlock Text ="{Binding Price}"/>
+                                    </StackPanel>
                                     <StackPanel>
-                                    <TextBlock Text ="Amount:"/>
-                                    <TextBlock Text ="{Binding Amount}"/>
-                                        </StackPanel>
+                                        <TextBlock Text ="{DynamicResource Amo}"/>
+                                        <TextBlock Text ="{Binding Amount}"/>
+                                    </StackPanel>
                                     <StackPanel>
                                         <Button Content ="Delete" Command ="{Binding Remove}" Width="50"/>
-                                            <Button Content ="Edit" Command ="{Binding Edit}" Width="50"/>
+                                        <Button Content ="Edit" Command ="{Binding Edit}" Width="50"/>
                                     </StackPanel>
                                 </UniformGrid>
                             </DataTemplate>
@@ -50,15 +63,16 @@
                                 </Style>
                             </UniformGrid.Resources>
                             <StackPanel>
-                            <TextBlock  Text ="Description"/>
+                                <TextBlock  Text ="Description"/>
                                 <TextBlock Text="{Binding Description}"/>
                             </StackPanel>
-                            
+
                         </UniformGrid>
 
                     </Expander>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-    </Grid>
+        </WrapPanel>
+    </StackPanel>
 </Window>

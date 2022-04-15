@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:v="clr-namespace:System;assembly=mscorlib"
+                    >
+    <v:String x:Key="ProductName">Name</v:String>
+    <v:String x:Key="ProductDescription">Description</v:String>
+    <v:String x:Key="ProductPrice">Price</v:String>
+    <v:String x:Key="ProductAmount">Amount</v:String>
+    <v:String x:Key="AddMenu">Adding Menu</v:String>
+    <v:String x:Key="ShowMenu">Show all</v:String>
+    <v:String x:Key="DeleteButton">Delete</v:String>
+    <v:String x:Key="EditButton">Edit</v:String>
+    <v:String x:Key="AddButton">Add</v:String>
+    <v:String x:Key="ChooseImageButton">Choose Image</v:String>
+</ResourceDictionary>

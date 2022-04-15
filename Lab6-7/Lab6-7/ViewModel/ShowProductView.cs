@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using Lab6_7.Model;
+using Lab6_7.View;
 
 namespace Lab6_7.ViewModel
 {
@@ -14,6 +16,9 @@ namespace Lab6_7.ViewModel
     {
         public Product Product;
         private Action _update;
+        private Action<string> _find;
+
+        public Window Window { get; set; }
 
         public ShowProductView(Product product,Action act)
         {
@@ -21,6 +26,14 @@ namespace Lab6_7.ViewModel
             _update = act;
         }
 
+        public ShowProductView(Product product, Action act,Action<string> find)
+        {
+            Product = product;
+            _update = act;
+            _find = find;
+        }
+
+        public int Id => Product.Id;
 
         public string Name
         {
@@ -83,24 +96,14 @@ namespace Lab6_7.ViewModel
 
         public ICommand Edit => new DelegateCommand(() =>
         {
-            
+            var newWpf = new EditProduct(Product,_update);
+            newWpf.Show();
+        });
+
+        public ICommand ConfirmEdit => new DelegateCommand(() =>
+        {
+            Shop.SaveEdit(Product,Id);
+            _update();
         });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
