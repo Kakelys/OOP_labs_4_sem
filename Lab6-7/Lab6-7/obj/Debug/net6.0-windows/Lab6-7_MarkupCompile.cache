@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\papka\programms\Git\OOP_labs_4_sem\Lab6-7\Lab6-7\App.xaml
-7-1408520902
+91029711645
 
-13-911910783
+14-1951084011
 201-1469757167
-Resources\lang.ru-RU.xaml;Resources\lang.xaml;Resources\MineResource.xaml;View\AddingProduct.xaml;View\EditProduct.xaml;View\MainShop.xaml;View\ShowProducts.xaml;
+Resources\dark.xaml;Resources\lang.ru-RU.xaml;Resources\lang.xaml;Resources\light.xaml;Resources\MineResource.xaml;View\AddingProduct.xaml;View\EditProduct.xaml;View\MainShop.xaml;View\ShowProducts.xaml;
 
-False
+True
 

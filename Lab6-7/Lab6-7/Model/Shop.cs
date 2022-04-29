@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -58,13 +59,41 @@ namespace Lab6_7.Model
             var temp = new Shop();
             temp.Products.Add(product);
             temp.SaveProducts();
+            UndoRedo.AddToUndo("Remove",product);
         }
 
         public static void Delete(Product product)
         {
             var temp = new Shop();
-            temp.Products.RemoveAt(product.Id-1);
+            var i = 0;
+            foreach (var elem in temp.Products)
+            {
+
+                if (
+                    elem.Name==product.Name
+                    && elem.Amount==product.Amount
+                    && elem.Description == product.Description
+                    && elem.ImagePath == product.ImagePath
+                    && elem.Price == product.Price
+                    && elem.Sold == product.Sold
+                              )
+                {
+                    break;
+                }
+
+                i++;
+            }
+
+            temp.Products.RemoveAt(i);
             temp.SaveProducts();
+            UndoRedo.AddToUndo("Add",product);
+        }
+
+        public static void DeleteLast()
+        {
+            var shop = new Shop();
+            shop.Products.RemoveAt(shop.Products.Count-1);
+            shop.SaveProducts();
         }
 
         public static void SaveEdit(Product product, int id)

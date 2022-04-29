@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <NeutralLanguage>en</NeutralLanguage>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -58,6 +59,10 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="View\UserElements\" />
   </ItemGroup>
 
 </Project>

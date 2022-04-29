@@ -23,7 +23,7 @@
             <ItemsControl ItemsSource="{Binding Products}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Expander Width="100">
+                    <Expander>
                         <Expander.HeaderTemplate>
                             <DataTemplate >
                                 <UniformGrid Columns ="5" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}, Path=DataContext }">
@@ -45,7 +45,7 @@
                                         <TextBlock Text ="{Binding Price}"/>
                                     </StackPanel>
                                     <StackPanel>
-                                        <TextBlock Text ="{DynamicResource Amo}"/>
+                                        <TextBlock Text ="{DynamicResource ProductAmount}"/>
                                         <TextBlock Text ="{Binding Amount}"/>
                                     </StackPanel>
                                     <StackPanel>

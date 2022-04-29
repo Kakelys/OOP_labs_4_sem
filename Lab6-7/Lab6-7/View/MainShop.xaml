@@ -1,10 +1,10 @@
 ﻿<Window x:Class="Lab6_7.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:Lab6_7"
+        xmlns:local="clr-namespace:Lab6_7.View"
         Title="MainWindow" Height="450" Width="800"
         Icon="pack://application:,,,/Resources/fox.png"
-        Cursor="pack://application:,,,/Resources/Normal.cur"
+        
         >
 
     <Window.Resources>
@@ -48,6 +48,18 @@
             </Button>
             <Button  Width="auto" Margin="5,10,5,5" Height="20" VerticalAlignment="Top" HorizontalAlignment="Stretch" Content="{DynamicResource ShowMenu}" Command ="{Binding Show}">
             </Button>
+            <Button Height="20" Command="{Binding AddSectionConfirm}"/>
+
+            <Border>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="U" Grid.Column="0" Margin="5" Command="{Binding Undo}"/>
+                    <Button Content="R" Grid.Column="1" Margin="5" Command="{Binding Redo}"/>
+                </Grid>
+            </Border>
         </StackPanel>
         <StackPanel>
         <ComboBox x:Name="menuLanguage" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120"/>
@@ -55,6 +67,6 @@
         <CheckBox x:Name="checkBox1" Grid.Column="0" Width="auto" Height="Auto"/>
         </StackPanel>
             <Button x:Name="MyButton" Width="100" Height="100" Grid.Column="0" Style="{StaticResource EventStyle}"/>
-              
+            
     </Grid>
 </Window>
