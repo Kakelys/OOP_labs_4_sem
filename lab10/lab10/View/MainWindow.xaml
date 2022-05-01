@@ -1,0 +1,61 @@
+﻿<Window x:Class="lab10.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lab10"
+        xmlns:viewModel="clr-namespace:lab10.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Width" Value="75"/>
+                <Setter Property="Height" Value="25"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <viewModel:ElementList/>
+    </Window.DataContext>
+
+    <Grid Background="#313131">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Content="Load" Command="{Binding LoadInfo}"/>
+            <Button Content="Previous" Command="{Binding PrevUser}"/>
+            <Button Content="Next" Command="{Binding NextUser}"/>
+            <Button Content="Add User" Command="{Binding AddUser}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Height="30" Width="30" Margin="10,0,0,0" Source="{Binding Img}" HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding UserName}" Margin="15,0,0,0" Foreground="White" FontSize="16" TextAlignment="Center" VerticalAlignment="Center"/>
+                        <Button Content="Add Post" HorizontalAlignment="Right" Command="{Binding AddPost}" Visibility="{Binding AddButtonVisibility}"/>
+                        <Button Content="Delete User" HorizontalAlignment="Right" Command="{Binding DeleteUser}" Visibility="{Binding UserVisibility}"/>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding CurPosts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding Message}" Foreground="White" FontSize="20"/>
+                                    <Button Content="Delete" Command="{Binding DeletePost}"  FontSize="8" Width="30" Height="14" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
+
+    </Grid>
+</Window>
